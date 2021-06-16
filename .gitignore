@@ -141,3 +141,4 @@ geckodriver.exe
 .vscode
 pathSetting.json
 wacca_all.json
+geckodriver
