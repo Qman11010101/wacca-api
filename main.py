@@ -18,7 +18,7 @@ driver = webdriver.Firefox(options=options, executable_path="./geckodriver")
 
 driver.get(URL_WACCA)
 driver.find_element(By.XPATH, '//a[@class="genre" and text()="すべて"]').click()
-time.sleep(1)
+time.sleep(10)
 source = driver.page_source
 driver.quit()
 
