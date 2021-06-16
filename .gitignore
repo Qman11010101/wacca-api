@@ -139,3 +139,5 @@ cython_debug/
 
 geckodriver.exe
 .vscode
+pathSetting.json
+wacca_all.json
