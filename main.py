@@ -14,7 +14,7 @@ API_PATH = PATHJSON["export_path"] + "wacca_all.json"
 
 options = Options()
 options.add_argument('--headless') # ヘッドレス
-driver = webdriver.Firefox(options=options)
+driver = webdriver.Firefox(options=options, executable_path="./geckodriver")
 
 driver.get(URL_WACCA)
 driver.find_element(By.XPATH, '//a[@class="genre" and text()="すべて"]').click()
