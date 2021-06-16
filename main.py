@@ -11,10 +11,13 @@ with open("pathSetting.json", encoding="utf-8_sig") as j:
     PATHJSON = json.load(j)
 URL_WACCA = "https://wacca.marv.jp/music/"
 API_PATH = PATHJSON["export_path"] + "wacca_all.json"
+print("Path loaded")
 
 options = Options()
 options.add_argument('--headless') # ヘッドレス
+print("Launching Firefox...")
 driver = webdriver.Firefox(options=options, executable_path="./geckodriver")
+print("Launched Firefox!")
 
 driver.get(URL_WACCA)
 
@@ -23,14 +26,18 @@ wait_time = 10
 
 while ms_count_check < 100:
     driver.find_element(By.XPATH, '//a[@class="genre" and text()="すべて"]').click()
+    print(f"Waiting interval is {wait_time}sec")
     time.sleep(wait_time)
     source = driver.page_source
 
     html = BeautifulSoup(source, "html.parser")
     musics = [m for m in html.find_all("div", {"class": "song"})]
     ms_count_check = len(musics)
+    if ms_count_check < 100:
+        print(f"Music number is {ms_count_check}, under 100; Retry!")
     wait_time += 5
-
+print("Done!")
+print("Appending to JSON...")
 music_json = []
 for m in musics:
     title = m.find_all("div", {"class": "data_name"})[0].get_text()
@@ -57,6 +64,8 @@ for m in musics:
     if has_inf:
         tempobj["level"]["inf"] = lv_inf
     music_json.append(tempobj)
-
+print("Done!")
+print("Writing to JSON file...")
 with open(API_PATH, "w", encoding="utf-8_sig") as api:
     json.dump(music_json, api, ensure_ascii=False)
+print("Done! All process succeeded")
