@@ -1,5 +1,3 @@
-# {renderType:"plainText",outputAsJson:true,overseerScript:'await page.goto("https://wacca.marv.jp/music/");page.click("a[data-s=all]");await page.waitForNavigation();'}
-# >> %7BrenderType%3A%22plainText%22%2CoutputAsJson%3Atrue%2CoverseerScript%3A%27await+page.goto%28%22https%3A%2F%2Fwacca.marv.jp%2Fmusic%2F%22%29%3Bawait+page.click%28%22a%5Bdata-s%3Dall%5D%22%29%3Bawait+page.waitForNavigation%28%29%3B%27%7D
 import json
 
 import requests
@@ -9,11 +7,16 @@ from bs4 import BeautifulSoup
 with open("pathSetting.json", encoding="utf-8_sig") as j:
     PATHJSON = json.load(j)
 API_PATH = PATHJSON["export_path"] + "wacca_all.json"
-API_KEY = PATHJSON["api_key"]
+API_KEYS = PATHJSON["api_keys"]
 REQ_STR = """%7BrenderType%3A%22plainText%22%2CoutputAsJson%3Atrue%2CoverseerScript%3A%27await+page.goto%28%22https%3A%2F%2Fwacca.marv.jp%2Fmusic%2F%22%29%3Bpage.click%28%22a%5Bdata-s%3Dall%5D%22%29%3Bawait+page.waitForNavigation%28%29%3B%27%7D"""
-
-r = requests.get(f"https://phantomjscloud.com/api/browser/v2/{API_KEY}/?request={REQ_STR}").json()
-source = r["pageResponses"][0]["frameData"]["content"]
+for key in API_KEYS:
+    r = requests.get(f"https://phantomjscloud.com/api/browser/v2/{key}/?request={REQ_STR}").json()
+    try:
+        source = r["pageResponses"][0]["frameData"]["content"]
+    except:
+        pass
+    else:
+        break
 html = BeautifulSoup(source, "html.parser")
 musics = [m for m in html.find_all("div", {"class": "song"})]
 music_json = []
