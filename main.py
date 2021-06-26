@@ -26,6 +26,11 @@ for m in musics:
     category = m.find_all("div", {"class": "data_cat"})[0].get_text()
     lvs = m.find_all("div", {"class": "level_value"})
     has_inf = True if len(lvs) == 4 else False
+    has_mv = True if len(m.find_all("div", {"class": "data_movie"})) else False
+    if (ctx := m.find_all("div", {"class": "song_copy"})[0].get_text()) != "":
+        copy = ctx
+    else:
+        copy = None
     lv_nor = lvs[0].get_text().strip()
     lv_har = lvs[1].get_text().strip()
     lv_exp = lvs[2].get_text().strip()
@@ -35,7 +40,9 @@ for m in musics:
             "title": title,
             "artist": artist,
             "category": category,
-            "has_inferno": has_inf
+            "has_inferno": has_inf,
+            "has_movie": has_mv,
+            "copyright": copy
         },
         "level": {
             "nor": lv_nor,
