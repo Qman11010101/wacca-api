@@ -34,7 +34,8 @@ for m in musics:
         "meta": {
             "title": title,
             "artist": artist,
-            "category": category
+            "category": category,
+            "has_inferno": has_inf
         },
         "level": {
             "nor": lv_nor,
